@@ -47,7 +47,7 @@ export const create = async (text, userId) => {
     id: Date.now().toString(),
     userId,
     text,
-    createdAt: new Date(),
+    createdAt: Date().toString(),
   };
 
   tweets = [tweet, ...tweets];
