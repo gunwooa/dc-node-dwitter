@@ -26,8 +26,7 @@ const validateSignup = [
   body("url")
     .isURL()
     .withMessage("invalid URL")
-    .optional({ values: "falsy" })
-    .optional({ values: "null" }),
+    .optional({ checkFalsy: true, nullable: true }),
   validate,
 ];
 

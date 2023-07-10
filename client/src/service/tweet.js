@@ -1,12 +1,21 @@
 export default class TweetService {
-  constructor(http) {
+  constructor(http, tokenStorage) {
     this.http = http;
+    this.tokenStorage = tokenStorage;
+  }
+
+  getHeaders() {
+    const token = this.tokenStorage.getToken();
+    return {
+      Authorization: `Bearer ${token}`,
+    };
   }
 
   async getTweets(username) {
     const query = username ? `?username=${username}` : "";
     return await this.http.fetch(`/tweets${query}`, {
       method: "GET",
+      headers: this.getHeaders(),
     });
   }
 
@@ -18,12 +27,14 @@ export default class TweetService {
         username: "ellie",
         name: "Ellie",
       }),
+      headers: this.getHeaders(),
     });
   }
 
   async deleteTweet(tweetId) {
     return await this.http.fetch(`/tweets/${tweetId}`, {
       method: "DELETE",
+      headers: this.getHeaders(),
     });
   }
 
@@ -33,6 +44,7 @@ export default class TweetService {
       body: JSON.stringify({
         text,
       }),
+      headers: this.getHeaders(),
     });
   }
 }
