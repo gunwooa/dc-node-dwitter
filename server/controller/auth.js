@@ -5,7 +5,7 @@ import * as userRepository from "../data/auth.js";
 
 // TODO : Make it secure
 const bcryptSaltRounds = 12;
-const jwtSecretKey = "F2dn7x8HVzBWaQuEEDnhsvHXRWqAR63z";
+export const jwtSecretKey = "F2dn7x8HVzBWaQuEEDnhsvHXRWqAR63z";
 const jwtExpiresInDays = "2d";
 
 const createJwtToken = (id) => {
@@ -48,4 +48,12 @@ export const login = async (req, res) => {
 
   const token = createJwtToken(user.id);
   res.status(200).json({ token, username });
+};
+
+export const me = async (req, res) => {
+  const user = await userRepository.findById(req.userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  res.status(200).json({ token: req.token, username: user.username });
 };
