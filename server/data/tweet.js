@@ -17,19 +17,19 @@ let tweets = [
   },
 ];
 
-export const getAll = () => {
+export const getAll = async () => {
   return tweets;
 };
 
-export const getAllByUsername = (username) => {
+export const getAllByUsername = async (username) => {
   return tweets.filter((t) => t.username === username);
 };
 
-export const getById = (id) => {
+export const getById = async (id) => {
   return tweets.find((t) => t.id === id);
 };
 
-export const create = (text, name, username) => {
+export const create = async (text, name, username) => {
   const tweet = {
     id: Date.now().toString(),
     text,
@@ -42,7 +42,7 @@ export const create = (text, name, username) => {
   return tweet;
 };
 
-export const update = (id, text) => {
+export const update = async (id, text) => {
   const tweet = tweets.find((t) => t.id === id);
 
   if (tweet) {
@@ -51,6 +51,6 @@ export const update = (id, text) => {
   return tweet;
 };
 
-export const remove = (id) => {
+export const remove = async (id) => {
   tweets.filter((t) => t.id !== id);
 };
