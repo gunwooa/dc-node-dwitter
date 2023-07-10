@@ -1,56 +1,68 @@
+import * as userRepository from "../data/auth.js";
+
 let tweets = [
   {
     id: "1",
-    text: "파이팅!!!",
-    createdAt: Date.now().toString(),
-    name: "Bob",
-    username: "bob",
-    url: "https://picsum.photos/200/300",
+    userId: "999",
+    text: "안녕! 난 ㅈ밥이야!!",
+    createdAt: Date().toString(),
   },
   {
     id: "2",
-    text: "테스트 ㅋㅋ",
-    createdAt: Date.now().toString(),
-    name: "Ellie",
-    username: "ellie",
-    url: "https://picsum.photos/id/237/200/300",
+    userId: "999",
+    text: "안녕! 난 ㅈ밥이야!!2222",
+    createdAt: Date().toString(),
   },
 ];
 
 export const getAll = async () => {
-  return tweets;
+  return Promise.all(
+    tweets.map(async (tweet) => {
+      const { username, name, url } = await userRepository.findById(
+        tweet.userId
+      );
+      return { ...tweet, username, name, url };
+    })
+  );
 };
 
 export const getAllByUsername = async (username) => {
-  return tweets.filter((t) => t.username === username);
+  return getAll().then((tweets) =>
+    tweets.filter((tweet) => tweet.username === username)
+  );
 };
 
 export const getById = async (id) => {
-  return tweets.find((t) => t.id === id);
+  const found = tweets.find((tweet) => tweet.id === id);
+  if (!found) {
+    return null;
+  }
+
+  const { username, name, url } = await userRepository.findById(found.userId);
+  return { ...found, username, name, url };
 };
 
-export const create = async (text, name, username) => {
+export const create = async (text, userId) => {
   const tweet = {
     id: Date.now().toString(),
+    userId,
     text,
     createdAt: new Date(),
-    name,
-    username,
   };
 
   tweets = [tweet, ...tweets];
-  return tweet;
+  return getById(tweet.id);
 };
 
 export const update = async (id, text) => {
-  const tweet = tweets.find((t) => t.id === id);
-
+  const tweet = tweets.find((tweet) => tweet.id === id);
   if (tweet) {
     tweet.text = text;
   }
-  return tweet;
+
+  return getById(tweet.id);
 };
 
 export const remove = async (id) => {
-  tweets.filter((t) => t.id !== id);
+  tweets = tweets.filter((tweet) => tweet.id !== id);
 };
