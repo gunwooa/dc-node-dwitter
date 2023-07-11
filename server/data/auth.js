@@ -7,6 +7,14 @@ let users = [
     email: "bob@gmail.com",
     url: "https://picsum.photos/200/300",
   },
+  {
+    id: "888",
+    username: "ellie",
+    password: "$2b$12$cbtqdLi6I0NntkmGhD/QBuqhaXc9QK67FDlgh7DbBkX1t/SpO0Q3y", // abcd1234
+    name: "Ellie",
+    email: "ellie@gmail.com",
+    url: "https://picsum.photos/200/300",
+  },
 ];
 
 export const findByUsername = async (username) => {
