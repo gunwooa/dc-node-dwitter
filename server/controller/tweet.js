@@ -30,7 +30,8 @@ export const createTweet = async (req, res) => {
 };
 
 export const updateTweet = async (req, res) => {
-  const { id, text } = req.params;
+  const { id } = req.params;
+  const { text } = req.body;
 
   const tweet = await tweetRepository.getById(id);
   if (!tweet) {
