@@ -2,14 +2,12 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import * as userRepository from "../data/auth.js";
-
-// TODO : Make it secure
-const bcryptSaltRounds = 12;
-export const jwtSecretKey = "F2dn7x8HVzBWaQuEEDnhsvHXRWqAR63z";
-const jwtExpiresInDays = "2d";
+import { config } from "../config.js";
 
 const createJwtToken = (id) => {
-  return jwt.sign({ id }, jwtSecretKey, { expiresIn: jwtExpiresInDays });
+  return jwt.sign({ id }, config.jwt.secretKey, {
+    expiresIn: config.jwt.expiresInSec,
+  });
 };
 
 export const signup = async (req, res) => {
@@ -20,7 +18,7 @@ export const signup = async (req, res) => {
     return res.status(409).json({ message: `${username} already exists` });
   }
 
-  const hashed = await bcrypt.hash(password, bcryptSaltRounds);
+  const hashed = await bcrypt.hash(password, config.bcrypt.saltRounds);
   const userId = await userRepository.createUser({
     username,
     password: hashed,
