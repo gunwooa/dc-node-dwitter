@@ -1,7 +1,8 @@
 export default class TweetService {
-  constructor(http, tokenStorage) {
+  constructor(http, tokenStorage, socket) {
     this.http = http;
     this.tokenStorage = tokenStorage;
+    this.socket = socket;
   }
 
   getHeaders() {
@@ -46,5 +47,9 @@ export default class TweetService {
       }),
       headers: this.getHeaders(),
     });
+  }
+
+  onSync(callback) {
+    return this.socket.onSync("tweets", callback);
   }
 }
