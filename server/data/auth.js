@@ -1,32 +1,53 @@
-let users = [
+import SQ from "sequelize";
+
+import { sequelize } from "../db/database.js";
+
+const DataTypes = SQ.DataTypes;
+
+export const User = sequelize.define(
+  "user",
   {
-    id: "999",
-    username: "bob",
-    password: "$2b$12$cbtqdLi6I0NntkmGhD/QBuqhaXc9QK67FDlgh7DbBkX1t/SpO0Q3y", // abcd1234
-    name: "Bob",
-    email: "bob@gmail.com",
-    url: "https://picsum.photos/200/300",
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
+    },
+    username: {
+      type: DataTypes.STRING(45),
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING(128),
+      allowNull: false,
+    },
+    name: {
+      type: DataTypes.STRING(128),
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING(128),
+      allowNull: false,
+    },
+    url: DataTypes.TEXT,
   },
   {
-    id: "888",
-    username: "ellie",
-    password: "$2b$12$cbtqdLi6I0NntkmGhD/QBuqhaXc9QK67FDlgh7DbBkX1t/SpO0Q3y", // abcd1234
-    name: "Ellie",
-    email: "ellie@gmail.com",
-    url: "https://picsum.photos/200/300",
-  },
-];
+    timestamps: false,
+  }
+);
 
 export const findByUsername = async (username) => {
-  return users.find((user) => user.username === username);
+  return User.findOne({
+    where: { username },
+  });
 };
 
 export const findById = async (id) => {
-  return users.find((user) => user.id === id);
+  return User.findByPk(id);
 };
 
 export const createUser = async (user) => {
-  const created = { ...user, id: Date.now().toString() };
-  users.push(created);
-  return created.id;
+  return User.create(user).then((data) => {
+    return data.dataValues.id;
+  });
 };
